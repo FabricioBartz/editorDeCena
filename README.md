@@ -4,7 +4,7 @@ Este projeto consiste em um editor de cenários tridimensionais interativo desen
 
 ---
 
-## 🛠️ Princípios Gráficos e Arquitetura
+## Princípios Gráficos e Arquitetura
 
 O ecossistema foi construído sobre conceitos consolidados de computação gráfica de alto desempenho e otimização de recursos de hardware:
 
@@ -20,7 +20,7 @@ O ecossistema foi construído sobre conceitos consolidados de computação gráf
 
 ---
 
-## 📂 Estrutura de Arquivos Principais
+## Estrutura de Arquivos Principais
 
 * **`app.js`**: O núcleo e cérebro da aplicação. Gerencia o contexto gráfico, o loop contínuo de renderização a 60 FPS (`requestAnimationFrame`), escuta eventos de periféricos (mouse/teclado), controla o Grafo de Cena e centraliza os arrays de estados.
 * **`shaders.js`**: Define os códigos em linguagem **GLSL ES 3.0** executados diretamente nos núcleos da GPU. O *Vertex Shader* cuida das transformações de coordenadas e o *Fragment Shader* computa a iluminação difusa Lambertiana, amostragem de texturas e renderizações sólidas de picking.
@@ -31,7 +31,7 @@ O ecossistema foi construído sobre conceitos consolidados de computação gráf
 
 ---
 
-## 🚀 Como Rodar o Programa
+## Como Rodar o Programa
 
 1. Certifique-se de ter o editor **VS Code** instalado.
 2. Instale a extensão **Live Server** (desenvolviva por Ritwick Dey) através do menu de Extensões (`Ctrl+Shift+X`).
