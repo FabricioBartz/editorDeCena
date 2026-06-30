@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor de Cena - WebGL2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="menu-lateral">
+        <div class="grupo-controle">
+            <h3>Gerenciar Cena</h3>
+            <div style="display: flex; gap: 10px;">
+                <button id="btnSalvarCena">Salvar</button>
+                <button id="btnCarregarCena">Carregar</button>
+            </div>
+            <input type="file" id="inputJsonFile" accept=".json" style="display: none;">
+        </div>
+
+        <h3>Propriedades do Objeto</h3>
+        
+        <div class="grupo-controle">
+            <label for="sceneObjectsSelect">Objeto Ativo na Cena:</label>
+            <select id="sceneObjectsSelect">
+                <option value="">Nenhum objeto na cena</option>
+            </select>
+            <button id="btnExcluirObjeto">Excluir Objeto</button>
+        </div>
+
+        <div class="grupo-controle">
+            <label for="parentObjectSelect">Objeto Pai (Vincular a):</label>
+            <select id="parentObjectSelect">
+                <option value="none">Nenhum (Raiz da Cena)</option>
+            </select>
+        </div>
+
+        <div class="grupo-controle">
+            <h4>Posição (Translação)</h4>
+            <div class="item-slider">
+                <label>Eixo X: <span id="val-posX">0.00</span></label>
+                <input type="range" id="posX" min="-5" max="5" step="0.05" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Eixo Y: <span id="val-posY">0.00</span></label>
+                <input type="range" id="posY" min="-5" max="5" step="0.05" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Eixo Z: <span id="val-posZ">0.00</span></label>
+                <input type="range" id="posZ" min="-5" max="5" step="0.05" value="0">
+            </div>
+        </div>
+
+        <div class="grupo-controle">
+            <h4>Rotação (Graus)</h4>
+            <div class="item-slider">
+                <label>Giro X: <span id="val-rotX">0°</span></label>
+                <input type="range" id="rotX" min="-180" max="180" step="0.5" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Giro Y: <span id="val-rotY">0°</span></label>
+                <input type="range" id="rotY" min="-180" max="180" step="0.5" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Giro Z: <span id="val-rotZ">0°</span></label>
+                <input type="range" id="rotZ" min="-180" max="180" step="0.5" value="0">
+            </div>
+        </div>
+
+        <div class="grupo-controle">
+            <h4>Escala Tridimensional</h4>
+            <div class="item-slider">
+                <label>Escala X: <span id="val-escalaX">1.00</span></label>
+                <input type="range" id="escalaX" min="0.1" max="5" step="0.05" value="1">
+            </div>
+            <div class="item-slider">
+                <label>Escala Y: <span id="val-escalaY">1.00</span></label>
+                <input type="range" id="escalaY" min="0.1" max="5" step="0.05" value="1">
+            </div>
+            <div class="item-slider">
+                <label>Escala Z: <span id="val-escalaZ">1.00</span></label>
+                <input type="range" id="escalaZ" min="0.1" max="5" step="0.05" value="1">
+            </div>
+        </div>
+        
+        <div class="grupo-controle">
+            <h4>Câmera (Visualização)</h4>
+            <div class="item-slider">
+                <label>Orbitar (Ângulo): <span id="val-camAngle">0°</span></label>
+                <input type="range" id="camAngle" min="0" max="360" step="1" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Altura (Y): <span id="val-camHeight">1.5</span></label>
+                <input type="range" id="camHeight" min="-5" max="10" step="0.1" value="1.5">
+            </div>
+            <div class="item-slider">
+                <label>Distância (Raio): <span id="val-camRadius">4.0</span></label>
+                <input type="range" id="camRadius" min="1" max="15" step="0.1" value="4">
+            </div>
+        </div>
+
+        <div class="grupo-controle">
+            <h4>Propriedades da Textura (Atlas)</h4>
+            <div class="item-slider">
+                <label>UV Offset (U / V) - Deslocamento:</label>
+                <div class="container-uv-inputs">
+                    <input type="number" id="offsetX" step="0.01" value="0">
+                    <input type="number" id="offsetY" step="0.01" value="0">
+                </div>
+            </div>
+            <div class="item-slider">
+                <label>UV Repeat (U / V) - Repetição:</label>
+                <div class="container-uv-inputs">
+                    <input type="number" id="repeatX" step="0.1" value="1">
+                    <input type="number" id="repeatY" step="0.1" value="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="grupo-controle">
+            <h4>Configurações de Animação</h4>
+            <div class="item-slider">
+                <label><input type="checkbox" id="animarCheck"> Ativar Animação</label>
+            </div>
+            <div class="item-slider">
+                <label>Velocidade: <span id="val-vel">1.0</span></label>
+                <input type="range" id="vel" min="0.1" max="5.0" step="0.1" value="1.0">
+            </div>
+            <h5>Coordenadas de Destino:</h5>
+            <div class="item-slider">
+                <label>Destino X: <span id="val-destX">2.00</span></label>
+                <input type="range" id="destX" min="-5" max="5" step="0.05" value="2.0">
+            </div>
+            <div class="item-slider">
+                <label>Destino Y: <span id="val-destY">0.00</span></label>
+                <input type="range" id="destY" min="-5" max="5" step="0.05" value="0.0">
+            </div>
+            <div class="item-slider">
+                <label>Destino Z: <span id="val-destZ">0.00</span></label>
+                <input type="range" id="destZ" min="-5" max="5" step="0.05" value="0.0">
+            </div>
+            <h5>Rotação de Destino:</h5>
+            <div class="item-slider">
+                <label>Giro Destino X: <span id="val-destRotX">0°</span></label>
+                <input type="range" id="destRotX" min="-180" max="180" step="0.5" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Giro Destino Y: <span id="val-destRotY">0°</span></label>
+                <input type="range" id="destRotY" min="-180" max="180" step="0.5" value="0">
+            </div>
+            <div class="item-slider">
+                <label>Giro Destino Z: <span id="val-destRotZ">0°</span></label>
+                <input type="range" id="destRotZ" min="-180" max="180" step="0.5" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div id="container-canvas">
+        <canvas id="canvas3d"></canvas>
+    </div>
+
+    <div id="menu-catalogo">
+        <h3>Modelos Disponíveis</h3>
+        <div id="lista-modelos"></div>
+    </div>
+
+    <script src="https://twgljs.org/dist/5.x/twgl-full.min.js"></script>
+    <script src="https://webgl2fundamentals.org/webgl/resources/m4.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

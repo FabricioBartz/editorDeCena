@@ -1,0 +1,236 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1c1c1c;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #eeeeee;
+    display: flex;
+    flex-direction: row;
+}
+
+
+#menu-lateral {
+    width: 300px;
+    background-color: #2b2b2b;
+    border-right: 2px solid #181818;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+    color: #ff9f43; 
+    white-space: nowrap; 
+}
+
+.grupo-controle {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.item-slider label {
+    display: flex;
+    justify-content: space-between;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #ff9f43;
+}
+
+select {
+    width: 100%;
+    background-color: #444444;
+    color: #ffffff;
+    border: 1px solid #555555;
+    padding: 6px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+select:focus {
+    border-color: #ff9f43;
+    outline: none;
+}
+
+#btnSalvarCena, #btnCarregarCena {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.15s;
+    flex:1;
+}
+
+#btnSalvarCena {
+    background-color: #484848;
+}
+#btnSalvarCena:hover {
+    background-color: #636363;
+}
+
+#btnCarregarCena {
+    background-color: #484848;
+}
+#btnCarregarCena:hover {
+    background-color: #636363;
+}
+
+#btnExcluirObjeto {
+    margin-top: 5px;
+    background-color: #484848;
+    color: #ffffff;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background-color 0.15s;
+}
+
+#btnExcluirObjeto:hover {
+    background-color: #636363;
+}
+
+#btnExcluirObjeto:active {
+    background-color: #636363;
+}
+
+#container-canvas {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+}
+
+#canvas3d {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#menu-catalogo {
+    width: 230px;
+    background-color: #2b2b2b;
+    border-left: 2px solid #181818;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.instrucao-catalogo {
+    font-size: 11px;
+    color: #aaaaaa;
+    margin: 0;
+    line-height: 1.3;
+}
+
+#lista-modelos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-modelo {
+    background-color: #383838;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 10px;
+    padding: 4px;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.card-modelo:hover {
+    border-color: #ff9f43;
+    background-color: #484848;
+}
+
+.card-modelo img {
+    width: 55px;   
+    height: 55px;
+    object-fit: contain; 
+    background-color: #1e1e1e;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.nome-modelo {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag-modelo {
+    font-size: 10px;
+    color: #ff9f43;
+}
+
+.container-uv-inputs {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+input[type="number"] {
+    width: 50%;
+    background-color: #444444;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 6px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    text-align: center;
+}
+
+input[type="number"]:focus {
+    border-color: #ff9f43;
+    outline: none;
+}
