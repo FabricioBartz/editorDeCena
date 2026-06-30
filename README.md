@@ -1,4 +1,4 @@
-# Editor de Cena 3D - WebGL2 (Edição Halloween) 🎃
+# Editor de Cena 3D - WebGL2
 
 Este projeto consiste em um editor de cenários tridimensionais interativo desenvolvido em **WebGL2 nativo**. A aplicação utiliza as bibliotecas auxiliares **`TWGL.js`** (para simplificação da API do WebGL, gerenciamento de buffers, atributos e uniformes) e **`m4.js`** (para operações de álgebra linear e matrizes de transformação 4x4).
 
