@@ -67,7 +67,7 @@ async function main() {
   // Funções para salvar e desfazer ações
   function salvarEstadoHistorico() {
     if (historicoEstados.length >= 30) {
-      historicoEstados.shift();
+      historicoEstados.shift(); 
     }
     historicoEstados.push(JSON.stringify(instancias));
   }
@@ -330,6 +330,7 @@ async function main() {
     return { parts, baseMatrix, range };
   }
 
+  // Vinculação dos controles da interface com os sliders e campos numéricos
   vincularControleSlider('posX', 'val-posX', 'posX', obterArrayInstancias, obterIndexAtivo, forcarAtualizacaoInterface, salvarEstadoHistorico);
   vincularControleSlider('posY', 'val-posY', 'posY', obterArrayInstancias, obterIndexAtivo, forcarAtualizacaoInterface, salvarEstadoHistorico);
   vincularControleSlider('posZ', 'val-posZ', 'posZ', obterArrayInstancias, obterIndexAtivo, forcarAtualizacaoInterface, salvarEstadoHistorico);
@@ -376,6 +377,7 @@ async function main() {
   const atlasImageHTML = new Image();
   atlasImageHTML.src = 'models/halloween/atlas.png';
   
+  // Carregamento do catálogo de modelos a partir do arquivo JSON
   atlasImageHTML.onload = async function() {
     try {
       const jsonResponse = await fetch('models/json/models.json');
@@ -468,13 +470,15 @@ async function main() {
   var zNear = 0.1; var zFar = 50.0;
   // Função para calcular a matriz local de uma instância, considerando animação
   function calcularMatrizLocal(inst, time) {
-    var currentX = inst.posX; var currentY = inst.posY; var currentZ = inst.posZ;
+    var currentX = inst.posX; 
+    var currentY = inst.posY; 
+    var currentZ = inst.posZ;
     var currentRotX = inst.rotX !== undefined ? inst.rotX : 0.0;
     var currentRotY = inst.rotY !== undefined ? inst.rotY : 0.0;
     var currentRotZ = inst.rotZ !== undefined ? inst.rotZ : 0.0;
 
     if (inst.animar) {  // Se a animação estiver ativada
-      var factor = (Math.sin(time * inst.velocidade) + 1) * 0.5; 
+      var factor = (Math.sin(time * inst.velocidade) + 1) * 0.5; // factor varia entre 0 e 1 com base no tempo e na velocidade da instância
       currentX = inst.posX + (inst.destX - inst.posX) * factor;
       currentY = inst.posY + (inst.destY - inst.posY) * factor;
       currentZ = inst.posZ + (inst.destZ - inst.posZ) * factor;
@@ -498,7 +502,7 @@ async function main() {
   }
   
   function render(now) {
-    var time = now * 0.001; 
+    var time = now * 0.001; // leitura do Cristal de Quartzo e conversão para segundos
 
     twgl.resizeCanvasToDisplaySize(gl.canvas);
     var fieldOfViewRadians = degToRad(60);
@@ -514,8 +518,8 @@ async function main() {
     var view = m4.inverse(cameraMatrixLookAt);
 
     // Grafo de cenas para criar a herança entre os objetos
-    var matrizesLocais = instancias.map(inst => calcularMatrizLocal(inst, time));
-    var matrizesMundoFinais = instancias.map((inst, index) => {
+    var matrizesLocais = instancias.map(inst => calcularMatrizLocal(inst, time)); 
+    var matrizesMundoFinais = instancias.map((inst, index) => { 
       var mFim = m4.copy(matrizesLocais[index]);
       var pIdx = inst.parentIndex;
       while (pIdx !== null && pIdx !== undefined && pIdx < instancias.length) {
@@ -598,8 +602,8 @@ async function main() {
 
       var u_world = m4.multiply(matrizesMundoFinais[index], geomData.baseMatrix);
       var textureMatrix = m4.identity();
-      textureMatrix = m4.translate(textureMatrix, inst.offsetX, inst.offsetY, 0);
-      textureMatrix = m4.scale(textureMatrix, inst.repeatX, inst.repeatY, 1);
+      textureMatrix = m4.translate(textureMatrix, inst.offsetX, inst.offsetY, 0); // Aplica o deslocamento da textura
+      textureMatrix = m4.scale(textureMatrix, inst.repeatX, inst.repeatY, 1); // Aplica a repetição da textura
 
       twgl.setUniforms(meshProgramInfo, {
         u_lightDirection: m4.normalize([-1, 3, 5]), // Direção da luz
