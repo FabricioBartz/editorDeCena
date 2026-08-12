@@ -4,7 +4,7 @@ Editor de cenários tridimensionais interativo, desenvolvido em **WebGL2 nativo*
 
 A aplicação utiliza as bibliotecas auxiliares **`TWGL.js`** (simplificação da API do WebGL, gerenciamento de buffers, atributos e uniformes) e **`m4.js`** (operações de álgebra linear e matrizes de transformação 4x4).
 
-🔗 **Demo online:** [https://fabriciobartz.github.io/editorDeCena](https://fabriciobartz.github.io/editorDeCena/)(#)
+🔗 **Demo online:** [https://fabriciobartz.github.io/editorDeCena](https://fabriciobartz.github.io/editorDeCena/)
 
 ---
 
