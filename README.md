@@ -1,6 +1,59 @@
 # Editor de Cena 3D - WebGL2
 
-Este projeto consiste em um editor de cenários tridimensionais interativo desenvolvido em **WebGL2 nativo**. A aplicação utiliza as bibliotecas auxiliares **`TWGL.js`** (para simplificação da API do WebGL, gerenciamento de buffers, atributos e uniformes) e **`m4.js`** (para operações de álgebra linear e matrizes de transformação 4x4).
+Editor de cenários tridimensionais interativo, desenvolvido em **WebGL2 nativo** com interface voltada para Desktop. Permite posicionar, transformar e organizar hierarquicamente modelos 3D de uma temática de Halloween, com exportação/importação de cenas em JSON.
+
+A aplicação utiliza as bibliotecas auxiliares **`TWGL.js`** (simplificação da API do WebGL, gerenciamento de buffers, atributos e uniformes) e **`m4.js`** (operações de álgebra linear e matrizes de transformação 4x4).
+
+🔗 **Demo online:** [seu-usuario.github.io/editorDeCena](#) *(substitua pelo link real após publicar no GitHub Pages)*
+
+---
+
+### Tela Inicial 
+Abaixo, a demonstração da tela inicial do editor de cenários.
+
+| <img src="./tela-inicial/tela_inicial_editor_de_cena.png" width="220px" /> |
+
+---
+
+## Índice
+
+- [Funcionalidades](#funcionalidades)
+- [Controles e Uso](#controles-e-uso)
+- [Princípios Gráficos e Arquitetura](#princípios-gráficos-e-arquitetura)
+- [Estrutura de Arquivos Principais](#estrutura-de-arquivos-principais)
+- [Como Rodar o Programa](#como-rodar-o-programa)
+- [Créditos](#créditos)
+
+---
+
+## Funcionalidades
+
+- **Catálogo de modelos 3D** (temática de Halloween: abóboras, lápides, tochas, ossos, cercas, etc.), exibido com miniaturas geradas dinamicamente em 3D.
+- **Adição e remoção** de objetos na cena.
+- **Transformações completas** por objeto: posição, rotação (X/Y/Z) e escala independente por eixo.
+- **Hierarquia entre objetos** — vínculo pai-filho, onde um objeto herda posição/rotação/escala do seu "pai" na cena.
+- **Seleção por clique** direto no canvas (via *color picking*, sem raycasting).
+- **Animação de vaivém** configurável por objeto, com interpolação suave (LERP + easing senoidal).
+- **Mapeamento de textura por atlas**, com controle de offset/repeat em tempo real.
+- **Desfazer (Ctrl+Z)** com histórico de estados da cena.
+- **Salvar cena** como arquivo `.json` para o computador.
+- **Carregar cena** a partir de um arquivo `.json` local.
+- **Carregar cena de exemplo** direto do repositório, com um clique — útil para quem está testando a demo pela primeira vez e não tem um arquivo de cena próprio.
+
+## Controles e Uso
+
+| Ação | Como fazer |
+|---|---|
+| Selecionar um objeto | Clique nele diretamente no canvas 3D |
+| Adicionar objeto à cena | Escolha um modelo no catálogo lateral e clique para adicionar |
+| Transformar objeto selecionado | Use os sliders/inputs de posição, rotação e escala no painel lateral |
+| Definir hierarquia (pai/filho) | Selecione o objeto "filho" e escolha o "pai" no dropdown correspondente |
+| Desfazer última ação | `Ctrl + Z` |
+| Salvar cena atual | Botão **"Salvar"** — baixa um `.json` com o estado da cena |
+| Carregar cena própria | Botão **"Carregar"** — abre o seletor de arquivos do seu computador |
+| Ver uma cena pronta rapidamente | Botão **"Carregar Cena de Exemplo"** — carrega instantaneamente a cena de exemplo incluída no repositório, sem precisar de nenhum arquivo local |
+
+> **Nota técnica:** o botão "Carregar" usa um `<input type="file">`, que por segurança do navegador só acessa arquivos do computador de quem está usando o site — nunca arquivos do servidor. Por isso o botão "Carregar Cena de Exemplo" existe separadamente: ele busca (`fetch`) o arquivo `cena/minha_cena_halloween.json` diretamente do repositório, funcionando para qualquer visitante, mesmo sem nenhum arquivo salvo localmente.
 
 ---
 
@@ -28,13 +81,32 @@ O ecossistema foi construído sobre conceitos consolidados de computação gráf
 * **`thumb-generator.js`**: Dita as regras do pipeline isolado para a fotografia tridimensional em segundo plano das miniaturas.
 * **`obj-parser.js`**: Interpretador responsável por ler arquivos de texto puros no formato Wavefront `.obj` e estruturar vetores numéricos de posições, normais e UVs prontos para os buffers do WebGL2.
 * **`geometry-utils.js`**: Utilitário matemático focado na modelagem algorítmica do grid do solo.
+* **`cena/`**: Contém a cena de exemplo (`minha_cena_halloween.json`), carregável diretamente pela interface.
+* **`models/`**: Modelos `.obj`, atlas de textura e catálogo de modelos disponíveis (`models/json/models.json`).
 
 ---
 
 ## Como Rodar o Programa
 
+### Localmente
+
 1. Certifique-se de ter o editor **VS Code** instalado.
-2. Instale a extensão **Live Server** (desenvolviva por Ritwick Dey) através do menu de Extensões (`Ctrl+Shift+X`).
-3. Abra a pasta do seu projeto completo no VS Code.
+2. Instale a extensão **Live Server** (desenvolvida por Ritwick Dey) através do menu de Extensões (`Ctrl+Shift+X`).
+3. Abra a pasta do projeto completo no VS Code.
 4. No canto inferior direito da barra de status do VS Code, clique no botão **"Go Live"** (ou clique com o botão direito sobre o arquivo `index.html` e escolha *Open with Live Server*).
 5. O seu navegador padrão abrirá automaticamente o link `http://127.0.0.1:5500/index.html` com o projeto rodando perfeitamente.
+
+### Publicado (GitHub Pages)
+
+O projeto é 100% estático (HTML/CSS/JS puro, sem backend), então também está disponível publicado via GitHub Pages — veja o link no topo deste README.
+
+---
+
+## Créditos
+
+- Modelos 3D de temática Halloween: pack **KayKit Halloween Bits**, de [Kay Lousberg](https://kaylousberg.com/) *(confira a licença específica do pack antes de redistribuir)*.
+- Bibliotecas: [TWGL.js](https://twgljs.org/) e [m4.js](https://webgl2fundamentals.org/) (parte do ecossistema de tutoriais WebGL2Fundamentals).
+
+---
+
+Projeto desenvolvido para fins de aprendizado.

@@ -167,7 +167,52 @@ async function main() {
     inputJsonFile.click();
   });
 
-  // Carregamento de cena a partir de um arquivo JSON
+  // Função central que aplica um array de instâncias (vindo de onde for:
+  // arquivo local escolhido pelo usuário OU fetch de um JSON do próprio site)
+  // à cena atual. Mantida separada para não duplicar essa lógica em dois lugares.
+  async function aplicarDadosNaCena(dadosCarregados) {
+    if (!Array.isArray(dadosCarregados)) throw new Error("Formato inválido.");
+
+    salvarEstadoHistorico();
+
+    for (const inst of dadosCarregados) {
+      if (inst.scale !== undefined && inst.scaleX === undefined) {
+        inst.scaleX = inst.scale;
+        inst.scaleY = inst.scale;
+        inst.scaleZ = inst.scale;
+      }
+      if (inst.scaleX === undefined) inst.scaleX = 1.0;
+      if (inst.scaleY === undefined) inst.scaleY = 1.0;
+      if (inst.scaleZ === undefined) inst.scaleZ = 1.0;
+      if (inst.posX === undefined) inst.posX = 0.0;
+      if (inst.posY === undefined) inst.posY = 0.0;
+      if (inst.posZ === undefined) inst.posZ = 0.0;
+      if (inst.rotX === undefined) inst.rotX = 0.0;
+      if (inst.rotY === undefined) inst.rotY = 0.0;
+      if (inst.rotZ === undefined) inst.rotZ = 0.0;
+      if (inst.destRotX === undefined) inst.destRotX = 0.0;
+      if (inst.destRotY === undefined) inst.destRotY = 0.0;
+      if (inst.destRotZ === undefined) inst.destRotZ = 0.0;
+
+      if (!modelosCarregados[inst.type]) {
+        const response = await fetch(`models/halloween/${inst.type}.obj`);
+        const text = await response.text();
+        const objParsed = parseOBJ(text);
+        modelosCarregados[inst.type] = obterDadosGeometria(objParsed);
+      }
+    }
+    instancias = dadosCarregados;
+    instanceCounter = instancias.reduce((max, inst) => {
+      const num = parseInt(inst.id.split('_').pop());
+      return isNaN(num) ? max : Math.max(max, num);
+    }, 0);
+
+    selectedInstanceIndex = instancias.length > 0 ? 0 : -1;
+    atualizarDropdownsInterface(instancias, selectedInstanceIndex, sceneSelectElement, parentSelectElement);
+    atualizarValoresSlidersInterface(instancias, selectedInstanceIndex);
+  }
+
+  // Carregamento de cena a partir de um arquivo JSON escolhido pelo usuário
   inputJsonFile.addEventListener('change', function(event) {
     const arquivoMarcado = event.target.files[0];
     if (!arquivoMarcado) return;
@@ -176,45 +221,7 @@ async function main() {
     leitorArquivo.onload = async function(e) {
       try {
         const dadosCarregados = JSON.parse(e.target.result);
-        if (!Array.isArray(dadosCarregados)) throw new Error("Formato inválido.");
-
-        salvarEstadoHistorico();
-
-        for (const inst of dadosCarregados) {
-          if (inst.scale !== undefined && inst.scaleX === undefined) {
-            inst.scaleX = inst.scale;
-            inst.scaleY = inst.scale;
-            inst.scaleZ = inst.scale;
-          }
-          if (inst.scaleX === undefined) inst.scaleX = 1.0;
-          if (inst.scaleY === undefined) inst.scaleY = 1.0;
-          if (inst.scaleZ === undefined) inst.scaleZ = 1.0;
-          if (inst.posX === undefined) inst.posX = 0.0;
-          if (inst.posY === undefined) inst.posY = 0.0;
-          if (inst.posZ === undefined) inst.posZ = 0.0;
-          if (inst.rotX === undefined) inst.rotX = 0.0;
-          if (inst.rotY === undefined) inst.rotY = 0.0;
-          if (inst.rotZ === undefined) inst.rotZ = 0.0;
-          if (inst.destRotX === undefined) inst.destRotX = 0.0;
-          if (inst.destRotY === undefined) inst.destRotY = 0.0;
-          if (inst.destRotZ === undefined) inst.destRotZ = 0.0;
-
-          if (!modelosCarregados[inst.type]) {
-            const response = await fetch(`models/halloween/${inst.type}.obj`);
-            const text = await response.text();
-            const objParsed = parseOBJ(text);
-            modelosCarregados[inst.type] = obterDadosGeometria(objParsed);
-          }
-        }
-        instancias = dadosCarregados;
-        instanceCounter = instancias.reduce((max, inst) => {
-          const num = parseInt(inst.id.split('_').pop());
-          return isNaN(num) ? max : Math.max(max, num);
-        }, 0);
-
-        selectedInstanceIndex = instancias.length > 0 ? 0 : -1;
-        atualizarDropdownsInterface(instancias, selectedInstanceIndex, sceneSelectElement, parentSelectElement);
-        atualizarValoresSlidersInterface(instancias, selectedInstanceIndex);
+        await aplicarDadosNaCena(dadosCarregados);
         alert("Cena importada com sucesso!");
       } catch (err) {
         alert("Falha ao ler o arquivo JSON: " + err.message);
@@ -223,6 +230,23 @@ async function main() {
     leitorArquivo.readAsText(arquivoMarcado);
     event.target.value = "";
   });
+
+  // Carregamento da cena de exemplo, direto do repositório (funciona igual
+  // local e hospedado no GitHub Pages, sem depender do computador do visitante)
+  const btnCarregarCenaExemplo = document.querySelector('#btnCarregarCenaExemplo');
+  if (btnCarregarCenaExemplo) {
+    btnCarregarCenaExemplo.addEventListener('click', async function() {
+      try {
+        const response = await fetch('cena/minha_cena_halloween.json');
+        if (!response.ok) throw new Error(`Não foi possível carregar o arquivo (HTTP ${response.status}).`);
+        const dadosCarregados = await response.json();
+        await aplicarDadosNaCena(dadosCarregados);
+        alert("Cena de exemplo carregada com sucesso!");
+      } catch (err) {
+        alert("Falha ao carregar a cena de exemplo: " + err.message);
+      }
+    });
+  }
 
   // Função para converter coordenadas da janela para coordenadas do canvas
   function windowToCanvasCoordinations(x, y) {

@@ -74,7 +74,7 @@ select:focus {
     outline: none;
 }
 
-#btnSalvarCena, #btnCarregarCena {
+#btnSalvarCena, #btnCarregarCena, #btnCarregarCenaExemplo {
     padding: 8px;
     border: none;
     border-radius: 4px;
@@ -98,6 +98,13 @@ select:focus {
     background-color: #484848;
 }
 #btnCarregarCena:hover {
+    background-color: #636363;
+}
+
+#btnCarregarCenaExemplo {
+    background-color: #484848;
+}
+#btnCarregarCenaExemplo:hover {
     background-color: #636363;
 }
 
