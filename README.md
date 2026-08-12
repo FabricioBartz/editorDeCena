@@ -110,3 +110,4 @@ O projeto é 100% estático (HTML/CSS/JS puro, sem backend), então também est�
 ---
 
 Projeto desenvolvido para fins de aprendizado.
+
