@@ -2,11 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Editor de Cena - WebGL2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="app-wrapper">
 
     <div id="menu-lateral">
         <div class="grupo-controle">
@@ -160,10 +162,101 @@
         <canvas id="canvas3d"></canvas>
     </div>
 
+    <div id="tutorial-overlay">
+        <div id="tutorial-card">
+            <h2>Bem-vindo ao Editor de Cena</h2>
+            <p class="tutorial-subtitle">Controles rápidos para você começar:</p>
+            <ul class="tutorial-lista">
+                <li><strong>Clique esquerdo</strong> num objeto — seleciona ele</li>
+                <li><strong>Clique esquerdo + arrastar</strong> — move o objeto selecionado</li>
+                <li><strong>Clique direito + arrastar</strong> — orbita a câmera ao redor da cena</li>
+                <li><strong>Roda do mouse (scroll)</strong> — zoom (aproxima/afasta a câmera)</li>
+                <li><strong>Ctrl + Z</strong> — desfaz a última ação</li>
+            </ul>
+            <label class="tutorial-checkbox">
+                <input type="checkbox" id="naoMostrarNovamente">
+                Não mostrar novamente
+            </label>
+            <button id="btnFecharTutorial">Entendi, vamos lá!</button>
+        </div>
+    </div>
+
     <div id="menu-catalogo">
         <h3>Modelos Disponíveis</h3>
         <div id="lista-modelos"></div>
     </div>
+
+    </div><!-- fim do #app-wrapper -->
+
+    <script>
+        (function () {
+            var CHAVE_STORAGE = 'editorDeCena_tutorialVisto';
+            var overlay = document.getElementById('tutorial-overlay');
+            var btnFechar = document.getElementById('btnFecharTutorial');
+            var checkboxNaoMostrar = document.getElementById('naoMostrarNovamente');
+
+            if (localStorage.getItem(CHAVE_STORAGE) === 'true') {
+                overlay.style.display = 'none';
+            }
+
+            btnFechar.addEventListener('click', function () {
+                if (checkboxNaoMostrar.checked) {
+                    localStorage.setItem(CHAVE_STORAGE, 'true');
+                }
+                overlay.style.display = 'none';
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var LARGURA_DESIGN = 1280;
+            var wrapper = document.getElementById('app-wrapper');
+            function larguraVisivel() {
+                return (window.visualViewport && window.visualViewport.width) || window.innerWidth;
+            }
+            function alturaVisivel() {
+                return (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+            }
+
+            function ajustarEscala() {
+                var larguraJanela = larguraVisivel();
+                var alturaJanela = alturaVisivel();
+
+                if (larguraJanela >= LARGURA_DESIGN) {
+                    wrapper.style.width = '100%';
+                    wrapper.style.height = '100%';
+                    wrapper.style.transform = 'none';
+                } else {
+                    var escala = larguraJanela / LARGURA_DESIGN;
+                    var alturaDesign = alturaJanela / escala;
+
+                    wrapper.style.width = LARGURA_DESIGN + 'px';
+                    wrapper.style.height = alturaDesign + 'px';
+                    wrapper.style.transform = 'scale(' + escala + ')';
+                }
+            }
+
+            ajustarEscala();
+            window.addEventListener('resize', ajustarEscala);
+            window.addEventListener('orientationchange', ajustarEscala);
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', ajustarEscala);
+            }
+            window.addEventListener('load', function () {
+                setTimeout(ajustarEscala, 300);
+            });
+        })();
+    </script>
+
+    <script>
+        document.addEventListener('touchmove', function (e) {
+            var dentroDePainelRolavel = e.target.closest('#menu-lateral, #menu-catalogo');
+            if (!dentroDePainelRolavel) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
 
     <script src="https://twgljs.org/dist/5.x/twgl-full.min.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/m4.js"></script>
